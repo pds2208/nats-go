@@ -10,7 +10,10 @@ import (
 
 func main() {
 
-	nc, _ := nats.Connect(nats.DefaultURL)
+	nc, err := nats.Connect(nats.DefaultURL)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
@@ -33,7 +36,7 @@ func main() {
 		}
 
 		// Fetch will return as soon as any message is available rather than wait until the full batch size is
-		// available, using a batch size of more than 1 allows for higher throughput when needed.
+		// available, Using a batch size of more than 1 allows for higher throughput when needed.
 		messages, err := sub.Fetch(10, nats.Context(ctx))
 		if err != nil {
 			log.Fatal(err)
